@@ -5,11 +5,10 @@
 //  Created by Álvaro Ferrández Gómez on 28/12/21.
 //
 
-import XCTest
 @testable import WeatherApp
+import XCTest
 
 class WeatherAppTests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -23,11 +22,19 @@ class WeatherAppTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
+    func testResponses() throws {
+        let weatherService = WeatherService.shared
+        let icons = weatherService.icons
+        let json = weatherService.json
+
+        XCTAssertNotNil(icons)
+        XCTAssertNotNil(json)
+    }
+
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {
             // Put the code you want to measure the time of here.
         }
     }
-
 }
