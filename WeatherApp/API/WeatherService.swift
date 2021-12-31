@@ -77,7 +77,7 @@ final class WeatherService: NSObject, ObservableObject {
             "lat": String(location.coordinate.latitude),
             "lon": String(location.coordinate.longitude),
             "units": "imperial",
-            "appid": "1e9e2bd521305f5ed37296e85251136f",
+            "appid": "XXXXX",
             "lang": "es"
         ].compactMap {
             URLQueryItem(name: $0.key, value: $0.value)
