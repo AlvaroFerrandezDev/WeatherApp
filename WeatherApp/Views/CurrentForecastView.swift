@@ -8,32 +8,37 @@
 import SwiftUI
 
 struct CurrentForecastView: View {
+    let current: Current
+    let city: String
+
     var body: some View {
         VStack {
             HStack {
-                Image(systemName: "cloud")
+                Image(systemName: current.iconName)
+                    .foregroundColor(.yellow)
 
                 VStack(alignment: .leading) {
-                    Text("Today")
+                    Text("Hoy")
                         .font(.system(size: 18))
                         .fontWeight(.medium)
 
-                    Text("Fri, 07 Jan")
+                    Text(current.formattedDate)
                         .font(.system(size: 14))
                         .fontWeight(.medium)
                         .foregroundColor(.gray)
                 }
             }
 
-            Text("32º")
+            Text(current.formattedTemp)
                 .font(.system(size: 80))
                 .fontWeight(.light)
                 .foregroundColor(.yellow)
 
-            Text("Boston, MA")
+            Text(city)
                 .font(.system(size: 16))
                 .fontWeight(.medium)
         }
+        .padding()
         .frame(maxWidth: UIScreen.main.bounds.width - 10, maxHeight: 200)
         .background(.white)
         .cornerRadius(8)
@@ -43,6 +48,9 @@ struct CurrentForecastView: View {
 
 struct CurrentForecastView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentForecastView()
+        if let current = WeatherService.shared.json?.current {
+            CurrentForecastView(current: current,
+                                city: "Boston")
+        }
     }
 }

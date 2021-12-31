@@ -11,7 +11,8 @@ import SwiftUI
 struct WeatherAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(weatherService: .shared,
+                        isPermissionDisabled: WeatherService.shared.authorizationStatus != .authorizedWhenInUse)
         }
     }
 }

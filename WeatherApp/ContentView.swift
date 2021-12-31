@@ -8,27 +8,56 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var weatherService = WeatherService.shared
+    @State var isPermissionDisabled: Bool = true
+
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Spacer()
+        if let json = weatherService.liveForecast, !isPermissionDisabled {
+            ScrollView(.vertical) {
+                VStack(alignment: .trailing, spacing: 0) {
+                    HeaderView(action: {})
 
-                Text("Weather Forecast")
+                    if let current = json.current {
+                        CurrentForecastView(current: current, city: weatherService.city)
+                            .padding()
+                    }
 
-                Spacer()
+                    if let hourly = json.hourly {
+                        HourlyForecastView(hourlyForecast: hourly)
+                            .padding()
+                    }
 
-                Button(action: {}) {
-                    Image(systemName: "square.stack.3d.forward.dottedline")
-                        .foregroundColor(.black)
+                    DetailsSection(action: {})
+
+                    if let daily = json.daily {
+                        DailyForecastView(dailyForecast: daily)
+                            .padding()
+                    }
                 }
-                .padding()
             }
 
-            
-            CurrentForecastView()
-            
-            Spacer()
+        } else {
+            ProgressView("Cargando")
+                .onChange(of: weatherService.authorizationStatus) { value in
+                    if value == .authorizedWhenInUse || value == .authorizedAlways {
+                        isPermissionDisabled = false
+                    }
+                }
+                .sheet(isPresented: $isPermissionDisabled, content: { PermissionView(action: {
+                    if weatherService.authorizationStatus == .notDetermined {
+                        weatherService.locationManager.requestWhenInUseAuthorization()
+                    } else {
+//                        if let url = URL(string: UIApplication.openSettingsURLString) {
+//                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//                        }
+                    }
+                })
+                })
+                .onAppear(perform: {
+                    if weatherService.authorizationStatus == .authorizedWhenInUse {
+                        weatherService.locationManager.requestLocation()
+                    }
+                })
         }
     }
 }

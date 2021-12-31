@@ -1,20 +1,19 @@
 //
-//  Current+Extension.swift
+//  Hourly+Extension.swift
 //  WeatherApp
 //
-//  Created by Álvaro Ferrández Gómez on 28/12/21.
+//  Created by Álvaro Ferrández Gómez on 30/12/21.
 //
 
 import CoreLocation
 import Foundation
 
-extension Current {
+extension Hourly {
     var formattedDate: String {
         let date = Date(timeIntervalSince1970: TimeInterval(dt))
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E, d MMM"
-        dateFormatter.locale = .init(identifier: "es_ES")
-        return dateFormatter.string(from: date).capitalized
+        dateFormatter.dateFormat = "h:mm a"
+        return dateFormatter.string(from: date)
     }
 
     var formattedTemp: String {
